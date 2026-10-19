@@ -1,17 +1,412 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#211b49" />
+    <title>AI Tech Consultant | Smart Workspace</title>
+
+    <!-- Bootstrap CSS -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="index.css" />
-    <script src="https://unpkg.com/react@17.0.0/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <div id="root"></div>
-    <script type="text/babel" src="./index.js"></script>
+    <header class="app-header">
+      <div class="container py-4 py-lg-5">
+        <div
+          class="d-flex flex-wrap justify-content-between align-items-center gap-3"
+        >
+          <div>
+            <p class="eyebrow mb-2">✦ YOUR AI-POWERED WORKSPACE</p>
+            <h1 class="mb-2">
+              AI Tech Consultant <span class="title-sparkle">✦</span>
+            </h1>
+            <p class="header-subtitle mb-0">
+              Knowledge, customer communication, and project planning in one
+              smart workspace.
+            </p>
+          </div>
+          <button id="resetAllBtn" class="btn reset-button" type="button">
+            ↻ Reset All Progress
+          </button>
+        </div>
+
+        <div class="row g-3 mt-4">
+          <div class="col-12 col-sm-4">
+            <div class="stat-card">
+              <span>📚 Articles viewed</span>
+              <strong id="articleCount">0</strong>
+              <small>Your learning activity</small>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4">
+            <div class="stat-card">
+              <span>✉️ Drafts created</span>
+              <strong id="draftCount">0</strong>
+              <small>Customer replies prepared</small>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4">
+            <div class="stat-card">
+              <span>📋 Scopes prepared</span>
+              <strong id="scopeCount">0</strong>
+              <small>Project plans generated</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container main-container py-4 py-lg-5">
+      <div
+        id="appMessage"
+        class="alert d-none"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <nav class="task-nav mb-4" aria-label="Project tools">
+        <button
+          class="task-tab active"
+          data-task="knowledge"
+          type="button"
+          aria-selected="true"
+        >
+          <span>🧠</span> Knowledge Brain
+        </button>
+        <button
+          class="task-tab"
+          data-task="inbox"
+          type="button"
+          aria-selected="false"
+        >
+          <span>✉️</span> Inbox Agent
+        </button>
+        <button
+          class="task-tab"
+          data-task="scope"
+          type="button"
+          aria-selected="false"
+        >
+          <span>📋</span> Meeting to Scope
+        </button>
+      </nav>
+
+      <!-- KNOWLEDGE BRAIN -->
+      <section id="knowledgeSection" class="task-section">
+        <div class="section-heading mb-4">
+          <p class="eyebrow">SEARCH · DISCOVER · LEARN</p>
+          <h2>Knowledge Brain</h2>
+          <p class="muted mb-0">
+            Find useful answers from your sample knowledge library.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12 col-lg-5">
+            <div class="panel">
+              <div class="panel-heading">
+                <span class="panel-icon">🔎</span>
+                <div>
+                  <h3>Ask your question</h3>
+                  <p class="muted mb-0">Search for a topic or problem.</p>
+                </div>
+              </div>
+
+              <label for="questionInput" class="form-label mt-4"
+                >What do you need help with?</label
+              >
+              <textarea
+                id="questionInput"
+                class="form-control"
+                rows="4"
+                placeholder="Example: How can I reset my password?"
+              ></textarea>
+
+              <label for="categoryFilter" class="form-label mt-3"
+                >Filter by category</label
+              >
+              <select id="categoryFilter" class="form-select">
+                <option value="all">All categories</option>
+                <option value="design">Design</option>
+                <option value="membership">Membership</option>
+                <option value="account">Account</option>
+                <option value="payments">Payments</option>
+              </select>
+
+              <button
+                id="askBtn"
+                class="btn btn-primary w-100 mt-3"
+                type="button"
+              >
+                Find an Answer <span aria-hidden="true">→</span>
+              </button>
+
+              <div
+                id="knowledgeAnswer"
+                class="answer-box mt-4"
+                aria-live="polite"
+              >
+                <p class="muted mb-0">
+                  Your answer will appear here. You can also open an article
+                  from the library.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-7">
+            <div class="panel">
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3"
+              >
+                <div>
+                  <h3 class="mb-1">Knowledge Library</h3>
+                  <p class="muted mb-0">
+                    Explore the available sample articles.
+                  </p>
+                </div>
+                <span id="libraryCount" class="mini-badge">0 articles</span>
+              </div>
+              <div id="articleList" class="article-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INBOX AGENT -->
+      <section id="inboxSection" class="task-section d-none">
+        <div class="section-heading mb-4">
+          <p class="eyebrow">CUSTOMER COMMUNICATION</p>
+          <h2>Inbox Agent</h2>
+          <p class="muted mb-0">
+            Prepare a helpful customer reply and review it before using it.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="row g-4">
+            <div class="col-12 col-lg-5">
+              <div class="panel-heading">
+                <span class="panel-icon">💬</span>
+                <div>
+                  <h3>Customer message</h3>
+                  <p class="muted mb-0">
+                    Choose a category and enter the message.
+                  </p>
+                </div>
+              </div>
+
+              <label for="emailCategory" class="form-label mt-4"
+                >Message category</label
+              >
+              <select id="emailCategory" class="form-select">
+                <option value="technical">Technical support</option>
+                <option value="billing">Billing</option>
+                <option value="feature">Feature request</option>
+                <option value="account">Account access</option>
+              </select>
+
+              <label for="emailInput" class="form-label mt-3"
+                >Customer message</label
+              >
+              <textarea
+                id="emailInput"
+                class="form-control"
+                rows="8"
+                placeholder="Paste the customer's message here..."
+              ></textarea>
+
+              <button
+                id="draftBtn"
+                class="btn btn-primary w-100 mt-3"
+                type="button"
+              >
+                Generate Reply <span aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="col-12 col-lg-7">
+              <div
+                class="d-flex justify-content-between align-items-center gap-2"
+              >
+                <label for="draftOutput" class="form-label"
+                  >Suggested reply</label
+                >
+                <span id="characterCount" class="small muted"
+                  >0 characters</span
+                >
+              </div>
+
+              <textarea
+                id="draftOutput"
+                class="form-control output-area"
+                rows="12"
+                placeholder="Your suggested reply will appear here. You can edit it before copying."
+              ></textarea>
+
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <button
+                  id="approveDraftBtn"
+                  class="btn btn-success"
+                  type="button"
+                >
+                  ✓ Mark as Approved
+                </button>
+                <button
+                  id="copyDraftBtn"
+                  class="btn btn-outline-primary"
+                  type="button"
+                >
+                  Copy Reply
+                </button>
+                <button
+                  id="clearDraftBtn"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  Clear
+                </button>
+              </div>
+
+              <div
+                id="draftFeedback"
+                class="feedback mt-3"
+                aria-live="polite"
+              ></div>
+              <p class="small muted mt-2 mb-0">
+                This prototype creates sample suggestions in your browser.
+                Review all details before sending; it does not send emails
+                automatically.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MEETING TO SCOPE -->
+      <section id="scopeSection" class="task-section d-none">
+        <div class="section-heading mb-4">
+          <p class="eyebrow">PROJECT PLANNING</p>
+          <h2>Meeting to Scope</h2>
+          <p class="muted mb-0">
+            Turn meeting notes into an initial scope, task list, and estimated
+            budget.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="row g-4">
+            <div class="col-12 col-lg-5">
+              <div class="panel-heading">
+                <span class="panel-icon">📝</span>
+                <div>
+                  <h3>Meeting details</h3>
+                  <p class="muted mb-0">Describe the project requirements.</p>
+                </div>
+              </div>
+
+              <label for="meetingInput" class="form-label mt-4"
+                >Meeting notes</label
+              >
+              <textarea
+                id="meetingInput"
+                class="form-control"
+                rows="9"
+                placeholder="Example: Build a responsive website with login, dashboard, payment integration, and testing..."
+              ></textarea>
+
+              <label for="hourlyRate" class="form-label mt-3"
+                >Hourly rate (₹)</label
+              >
+              <input
+                id="hourlyRate"
+                type="number"
+                min="0"
+                step="100"
+                class="form-control"
+                value="1000"
+              />
+
+              <label for="contingency" class="form-label mt-3"
+                >Contingency (%)</label
+              >
+              <input
+                id="contingency"
+                type="number"
+                min="0"
+                max="100"
+                step="5"
+                class="form-control"
+                value="15"
+              />
+
+              <button
+                id="scopeBtn"
+                class="btn btn-primary w-100 mt-3"
+                type="button"
+              >
+                Generate Project Scope <span aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="col-12 col-lg-7">
+              <label for="scopeOutput" class="form-label"
+                >Draft project scope</label
+              >
+              <textarea
+                id="scopeOutput"
+                class="form-control output-area"
+                rows="17"
+                placeholder="Your project scope will appear here. Generate it from your meeting notes."
+              ></textarea>
+
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <button
+                  id="approveScopeBtn"
+                  class="btn btn-success"
+                  type="button"
+                >
+                  ✓ Mark as Approved
+                </button>
+                <button
+                  id="resetScopeBtn"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  Clear Scope
+                </button>
+              </div>
+
+              <div
+                id="scopeFeedback"
+                class="feedback mt-3"
+                aria-live="polite"
+              ></div>
+              <p class="small muted mt-2 mb-0">
+                Estimates are illustrative planning figures, not a formal quote.
+                Confirm the requirements and estimates with the project team.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="text-center py-4 mt-4">
+        <p class="mb-1 fw-semibold">AI Tech Consultant</p>
+        <p class="small muted mb-0">
+          Educational capstone prototype · Built with HTML, CSS, Bootstrap and
+          JavaScript
+        </p>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
   </body>
 </html>
